@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  db:
+    image: postgres
+    container_name: postgres
+    env_file: .env
+    ports:
+      - "5432:5432"
+
+  web:
+    container_name: web
+    restart: always
+    build: .
+    command: python src/manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/src
+    ports:
+      - "8000:8000"
+    depends_on:
+      - db
+    links:
+      - db:db
